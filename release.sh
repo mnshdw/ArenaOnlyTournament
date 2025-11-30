@@ -31,10 +31,20 @@ else
 
     update_version "$NEW_VERSION"
 
-    git add "$VERSION_FILE"
-    git commit -m "Bump version to $NEW_VERSION"
+    TAG="${NEW_VERSION}"
 
-    TAG="${NEW_VERSION}-vn"
+    # Check if tag already exists
+    if git rev-parse "$TAG" >/dev/null 2>&1; then
+        echo "Error: Tag $TAG already exists"
+        exit 1
+    fi
+
+    # Commit version bump if there are changes
+    git add "$VERSION_FILE"
+    if ! git diff --cached --quiet; then
+        git commit -m "Bump version to $NEW_VERSION"
+    fi
+
     git tag "$TAG"
     CURRENT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
     git push origin "$CURRENT_BRANCH"
