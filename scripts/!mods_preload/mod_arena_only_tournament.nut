@@ -1,7 +1,7 @@
 ::ModArenaOnlyTournament <- {
 	ID = "mod_arena_only_tournament",
 	Name = "Arena Only Tournament",
-	Version = "1.0.0",
+	Version = "1.0.1",
 	Enabled = true,
 	Unlimited = false,
 };
