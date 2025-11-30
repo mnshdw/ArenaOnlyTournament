@@ -1,8 +1,8 @@
-::mods_hookExactClass("entity/world/settlements/buildings/arena_building", function (o) {
-    local onClicked = o.onClicked;
-    o.onClicked = function (_townScreen) {
+::ModArenaOnlyTournament.HooksMod.hook("scripts/entity/world/settlements/buildings/arena_building", function (q) {
+
+    q.onClicked = @(__original) function (_townScreen) {
         if (!::ModArenaOnlyTournament.Enabled) {
-            return onClicked(_townScreen);
+            return __original(_townScreen);
         }
 
         if (!::World.getTime().IsDaytime) {
@@ -24,20 +24,25 @@
             if (isArenaContract) {
                 c = activeContract;
             } else if (contracts.len() == 0) {
-                // Always create tournament contract if we have enough slots
+                if (::HasLegends) {
+                    this.refreshTooltip();
+                    if (this.getCurrentAttempts() >= this.getMaxAttempts()) {
+                        return;
+                    }
+                }
+
                 if (::World.Assets.getStash().getNumberOfEmptySlots() >= 5) {
                     c = ::new("scripts/contracts/contracts/arena_tournament_contract");
                     c.setFaction(f.getID());
                     c.setHome(::World.State.getCurrentTown());
                    ::World.Contracts.addContract(c);
-                } else if (::World.Assets.getStash().getNumberOfEmptySlots() >= 3) {
-                    // Fall back to regular arena if not enough slots for tournament
-                    c = ::new("scripts/contracts/contracts/arena_contract");
-                    c.setFaction(f.getID());
-                    c.setHome(::World.State.getCurrentTown());
-                   ::World.Contracts.addContract(c);
                 } else {
                     return;
+                }
+
+                if (::HasLegends) {
+                    this.registerAttempt();
+                    this.refreshCooldown();
                 }
             } else {
                 c = contracts[0];

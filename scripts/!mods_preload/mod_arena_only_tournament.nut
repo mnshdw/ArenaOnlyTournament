@@ -24,6 +24,8 @@
 
 	::ModArenaOnlyTournament.Mod.Registry.setUpdateSource(::MSU.System.Registry.ModSourceDomain.GitHub);
 
+	::HasLegends <- ::Hooks.hasMod("mod_legends");
+
 	local page = ::ModArenaOnlyTournament.Mod.ModSettings.addPage("Arena Only Tournament");
 	local settingEnabled = page.addBooleanSetting(
 		"Enabled",
