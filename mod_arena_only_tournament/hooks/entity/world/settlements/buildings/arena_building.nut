@@ -9,14 +9,17 @@
             return;
         }
 
+        local unlimited = ::ModArenaOnlyTournament.Unlimited;
+        if (!unlimited && ::World.getTime().Days < this.m.CooldownUntil) {
+            return;
+        }
+
         local activeContract = ::World.Contracts.getActiveContract();
         local isArenaContract = activeContract != null
             && (activeContract.getType() == "contract.arena"
                 || activeContract.getType() == "contract.arena_tournament");
 
-        if ((activeContract == null || isArenaContract)
-            && ::World.getTime().Days >= this.m.CooldownUntil)
-        {
+        if (activeContract == null || isArenaContract) {
             local f = ::World.FactionManager.getFactionOfType(::Const.Faction.Arena);
             local contracts = f.getContracts();
             local c = null;
@@ -24,7 +27,7 @@
             if (isArenaContract) {
                 c = activeContract;
             } else if (contracts.len() == 0) {
-                if (::HasLegends) {
+                if (!unlimited && ::HasLegends) {
                     this.refreshTooltip();
                     if (this.getCurrentAttempts() >= this.getMaxAttempts()) {
                         return;
@@ -36,13 +39,13 @@
                     c.setFaction(f.getID());
                     c.setHome(::World.State.getCurrentTown());
                    ::World.Contracts.addContract(c);
+
+                    if (!unlimited && ::HasLegends) {
+                        this.registerAttempt();
+                        this.refreshCooldown();
+                    }
                 } else {
                     return;
-                }
-
-                if (::HasLegends) {
-                    this.registerAttempt();
-                    this.refreshCooldown();
                 }
             } else {
                 c = contracts[0];

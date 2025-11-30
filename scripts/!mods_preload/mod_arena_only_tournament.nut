@@ -3,6 +3,7 @@
 	Name = "Arena Only Tournament",
 	Version = "1.0.0",
 	Enabled = true,
+	Unlimited = false,
 };
 
 ::ModArenaOnlyTournament.HooksMod <- ::Hooks.register(
@@ -35,6 +36,16 @@
 	);
 	settingEnabled.addCallback(function (_value) {
 		::ModArenaOnlyTournament.Enabled = _value;
+	});
+
+	local settingUnlimited = page.addBooleanSetting(
+		"Unlimited",
+		false,
+		"Unlimited",
+		"When enabled, you can do unlimited tournaments per day. When disabled, only one tournament per day is allowed."
+	);
+	settingUnlimited.addCallback(function (_value) {
+		::ModArenaOnlyTournament.Unlimited = _value;
 	});
 
 	::include("mod_arena_only_tournament/load.nut");
