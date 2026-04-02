@@ -42,8 +42,8 @@
 	local settingUnlimited = page.addBooleanSetting(
 		"Unlimited",
 		false,
-		"Unlimited",
-		"When enabled, you can do unlimited tournaments per day. When disabled, only one tournament per day is allowed."
+		"Unlimited Fights",
+		"When enabled, you can do unlimited arena fights per day. When disabled, only one fight per day is allowed."
 	);
 	settingUnlimited.addCallback(function (_value) {
 		::ModArenaOnlyTournament.Unlimited = _value;
@@ -52,7 +52,7 @@
 	local settingNight = page.addBooleanSetting(
 		"Night",
 		false,
-		"Allow Night Fights",
+		"Night Fights",
 		"When enabled, arena fights can be started at night."
 	);
 	settingNight.addCallback(function (_value) {
