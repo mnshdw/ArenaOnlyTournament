@@ -4,6 +4,7 @@
 	Version = "1.0.1",
 	Enabled = true,
 	Unlimited = false,
+	Night = false,
 };
 
 ::ModArenaOnlyTournament.HooksMod <- ::Hooks.register(
@@ -14,7 +15,7 @@
 
 ::ModArenaOnlyTournament.HooksMod.require("mod_msu >= 1.2.7", "mod_modern_hooks >= 0.5.4");
 
-::ModArenaOnlyTournament.HooksMod.queue(">mod_msu", ">mod_legends", function () {
+::ModArenaOnlyTournament.HooksMod.queue(">mod_msu", ">mod_legends", ">mod_ROTUC", function () {
 	::ModArenaOnlyTournament.Mod <- ::MSU.Class.Mod(
 		::ModArenaOnlyTournament.ID,
 		::ModArenaOnlyTournament.Version,
@@ -46,6 +47,16 @@
 	);
 	settingUnlimited.addCallback(function (_value) {
 		::ModArenaOnlyTournament.Unlimited = _value;
+	});
+
+	local settingNight = page.addBooleanSetting(
+		"Night",
+		false,
+		"Allow Night Fights",
+		"When enabled, arena fights can be started at night."
+	);
+	settingNight.addCallback(function (_value) {
+		::ModArenaOnlyTournament.Night = _value;
 	});
 
 	::include("mod_arena_only_tournament/load.nut");
